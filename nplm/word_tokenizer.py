@@ -69,6 +69,9 @@ _TOKEN_PATTERNS = {
 
 
 def _iter_jsonl_paths(jsonl_dir: str) -> Iterator[str]:
+    """
+    Recursively iterates through the directory to find all JSONL files.
+    """
     for root, _dirs, files in os.walk(jsonl_dir):
         for fname in files:
             if fname.endswith(".jsonl") or fname.endswith(".jsonl.gz"):
@@ -76,12 +79,18 @@ def _iter_jsonl_paths(jsonl_dir: str) -> Iterator[str]:
 
 
 def _open_textmaybe_gzip(path: str):
+    """
+    Opens a file, automatically detecting if it's gzipped.
+    """
     if path.endswith(".gz"):
         return gzip.open(path, "rt", encoding="utf-8", errors="ignore")
     return open(path, "r", encoding="utf-8", errors="ignore")
 
 
 def iter_text_from_jsonl_dir(jsonl_dir: str, text_field: str = "text") -> Iterator[str]:
+    """
+    Iterates over the JSONL files and extracts the text field.
+    """
     import json as _json
     for path in _iter_jsonl_paths(jsonl_dir):
         with _open_textmaybe_gzip(path) as f:
@@ -104,6 +113,9 @@ def basic_tokenize(
     tokenizer: str = "simple",
     strip_punct: bool = False,
 ) -> List[str]:
+    """
+    Tokenizes the input text based on the selected tokenizer type.
+    """
     if lowercase:
         text = text.lower()
     pat = _TOKEN_PATTERNS.get(tokenizer)
@@ -135,11 +147,15 @@ class WordTokenizer:
         config: TokenizerConfig,
         freqs: Optional[Dict[str, int]] = None,
     ):
+        """
+        Initializes the WordTokenizer with vocab and configuration.
+        """
         self.token_to_id = token_to_id
         self.id_to_token = id_to_token
         self.config = config
         self.freqs = freqs or {}
 
+        # Special tokens
         self.pad_id = self.token_to_id.get(PAD)
         self.unk_id = self.token_to_id.get(UNK)
         self.bos_id = self.token_to_id.get(BOS) if config.include_bos else None
@@ -154,6 +170,9 @@ class WordTokenizer:
         text_field: str = "text",
         progress: bool = True,
     ) -> "WordTokenizer":
+        """
+        Builds a WordTokenizer from the given corpus directory.
+        """
         config = config or TokenizerConfig()
         specials = config.specials or DEFAULT_SPECIALS
 
@@ -195,6 +214,9 @@ class WordTokenizer:
 
     # ---- I/O ----
     def save(self, path: str) -> None:
+        """
+        Saves the tokenizer's vocab to the specified path.
+        """
         os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
         payload = {
             "token_to_id": self.token_to_id,
@@ -207,6 +229,9 @@ class WordTokenizer:
 
     @classmethod
     def load(cls, path: str) -> "WordTokenizer":
+        """
+        Loads a tokenizer from the specified path.
+        """
         with open(path, "r", encoding="utf-8") as f:
             obj = json.load(f)
         cfg = TokenizerConfig(**obj["config"])
@@ -219,12 +244,21 @@ class WordTokenizer:
 
     # ---- Encode/Decode ----
     def encode_tokens(self, tokens: List[str]) -> List[int]:
+        """
+        Encodes tokens into their corresponding integer IDs.
+        """
         return [self.token_to_id.get(t, self.unk_id) for t in tokens]
 
     def decode_ids(self, ids: List[int]) -> List[str]:
+        """
+        Decodes a list of integer IDs back into tokens.
+        """
         return [self.id_to_token[i] if 0 <= i < len(self.id_to_token) else UNK for i in ids]
 
     def tokenize(self, text: str) -> List[str]:
+        """
+        Tokenizes text into a list of tokens.
+        """
         return basic_tokenize(
             text,
             lowercase=self.config.lowercase,
@@ -233,6 +267,9 @@ class WordTokenizer:
         )
 
     def encode_text(self, text: str, with_bos_eos: bool = False) -> List[int]:
+        """
+        Encodes a text string into token IDs.
+        """
         toks = self.tokenize(text)
         if with_bos_eos:
             toks = ([BOS] if self.config.include_bos else []) + toks + (
@@ -242,6 +279,9 @@ class WordTokenizer:
 
     # ---- Reporting ----
     def unk_rate_on_dir(self, jsonl_dir: str, text_field: str = "text") -> float:
+        """
+        Estimates the unknown token rate on the given dataset.
+        """
         total = 0
         unk = 0
         for doc in iter_text_from_jsonl_dir(jsonl_dir, text_field=text_field):
