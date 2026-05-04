@@ -47,7 +47,6 @@ This repository includes scripts for:
    ```bash
    git clone https://github.com/Smuham98/NPLM.git
    cd NPLM
-````
 
 2. Set up a Python virtual environment (optional but recommended):
 
@@ -133,7 +132,6 @@ python -m nplm.train --config configs/tiny.yaml --data_dir data/wikitext2_encode
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-````
 
 ### **Instructions**:
 1. **Copy** the content above.
