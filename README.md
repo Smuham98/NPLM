@@ -1,4 +1,3 @@
-````bash
 # NPLM (Neural Probabilistic Language Model)
 
 This repository contains an implementation of the **Neural Probabilistic Language Model (NPLM)**. The goal of this project is to train a neural network-based language model to predict the next word in a sequence based on a given context.
