@@ -10,6 +10,9 @@ from .word_tokenizer import WordTokenizer, TokenizerConfig
 
 
 def parse_args() -> argparse.Namespace:
+    """
+    Parse command line arguments for building word-level vocabulary from a JSONL corpus.
+    """
     p = argparse.ArgumentParser(
         description="Build a word-level vocabulary from a JSONL corpus (one document per line)."
     )
@@ -76,10 +79,20 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Optional: path to JSONL dir (e.g., validation set) to report estimated UNK rate.",
     )
-    return p.parse_args()
+
+    # Check if provided paths are valid
+    args = p.parse_args()
+    
+    if not os.path.isdir(args.jsonl_dir):
+        raise ValueError(f"The directory {args.jsonl_dir} does not exist.")
+    
+    return args
 
 
 def main() -> None:
+    """
+    Main function to build the vocabulary from the corpus, save it, and optionally report UNK rate.
+    """
     args = parse_args()
 
     max_vocab = None if args.max_vocab <= 0 else args.max_vocab
@@ -93,6 +106,7 @@ def main() -> None:
         include_eos=not args.no_eos,
     )
 
+    print(f"[nplm] Building vocabulary from corpus in '{args.jsonl_dir}' ...")
     vocab = WordTokenizer.build_from_corpus(
         jsonl_dir=args.jsonl_dir,
         config=cfg,
