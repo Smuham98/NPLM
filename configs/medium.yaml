@@ -1,0 +1,16 @@
+# Configuration for a medium-sized model (for more accurate results)
+seed: 1337  # Random seed for reproducibility
+tokenizer_type: "word"  # Use word-level tokenization
+tokenizer_path: "artifacts/wikitext2_word_vocab.json"  # Path to the vocabulary file
+context_size: 5  # Size of the context window (number of previous tokens for prediction)
+vocab_size: 20000  # Vocabulary size (number of unique tokens)
+embedding_dim: 256  # Dimensionality of token embeddings (larger than tiny model)
+hidden_dim: 512  # Dimensionality of the hidden layers (larger than tiny model)
+dropout: 0.1  # Dropout rate for regularization
+optimizer: "adam"  # Optimizer to use during training
+lr: 0.0005  # Learning rate (smaller for larger models)
+batch_size: 512  # Number of samples per batch (larger batch size for more memory)
+max_steps: 40000  # Total number of training steps (increase this for better results)
+eval_every: 1000  # Evaluate the model every 1000 steps
+clip_grad_norm: 1.0  # Gradient clipping to prevent exploding gradients
+device: "auto"  # Automatically choose GPU if available, otherwise fallback to CPU

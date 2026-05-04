@@ -1,0 +1,25 @@
+{
+  "token_to_id": {
+    "<pad>": 0,
+    "<unk>": 1,
+    "<bos>": 2,
+    "<eos>": 3
+  },
+  "id_to_token": [
+    "<pad>",
+    "<unk>",
+    "<bos>",
+    "<eos>"
+  ],
+  "config": {
+    "min_freq": 2,
+    "max_vocab": 20000,
+    "lowercase": false,
+    "tokenizer": "simple",
+    "strip_punct": false,
+    "include_bos": true,
+    "include_eos": true,
+    "specials": null
+  },
+  "freqs": {}
+}

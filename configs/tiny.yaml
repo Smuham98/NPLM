@@ -1,0 +1,17 @@
+seed: 1337
+tokenizer_type: "word"
+tokenizer_path: "artifacts/wikitext2_word_vocab.json"  # Path to the vocabulary file
+context_size: 5  # Context window size
+vocab_size: 20000  # Vocabulary size
+embedding_dim: 128  # Dimensionality of token embeddings
+hidden_dim: 256  # Dimensionality of the hidden layers
+dropout: 0.1  # Dropout rate for regularization
+optimizer: "adam"  # Optimizer to use
+lr: 0.001  # Learning rate
+batch_size: 256  # Batch size
+max_steps: 20000  # Total number of training steps
+eval_every: 1000  # Evaluate the model every 1000 steps
+clip_grad_norm: 1.0  # Gradient clipping
+device: "cpu"  # For CPU usage
+
+data_dir: "data/wikitext2_encoded"  # Directory containing encoded data (train/test)
