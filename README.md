@@ -1,33 +1,49 @@
-# Neural Probabilistic Language Model (NPLM)
+# NPLM (Neural Probabilistic Language Model)
 
-This repository is a starting point for the one-week assignment based on
-Bengio et al. (2003), *A Neural Probabilistic Language Model*.
+This repository contains an implementation of the **Neural Probabilistic Language Model (NPLM)**. The goal of this project is to train a neural network-based language model to predict the next word in a sequence based on a given context.
 
-Students will extend this scaffold into a working project that can:
-- Download and preprocess a text corpus into JSONL shards,
-- Tokenize the text (either **word-level** or **BPE**),
-- Train a feed-forward neural language model with a fixed context window,
-- Evaluate perplexity on validation/test data,
-- Document the process, results, and their collaboration with LLMs.
+## Table of Contents
+- [Overview](#overview)
+- [Features](#features)
+- [Installation](#installation)
+- [Dataset](#dataset)
+- [Training](#training)
+- [Evaluation](#evaluation)
+- [Model Configuration](#model-configuration)
+- [License](#license)
 
----
+## Overview
+
+The **NPLM** is a neural network-based language model that uses an embedding layer to map words to dense vectors, followed by an LSTM or GRU to capture context. The model is trained on text data and learns to predict the next word in a sequence, making it suitable for various NLP tasks such as text generation, language modeling, and sequence prediction.
+
+This repository includes scripts for:
+- Preprocessing the dataset
+- Building the vocabulary
+- Training the model
+- Evaluating model performance
+
+## Features
+
+- **Tokenizer**: Built to tokenize text data into words and handle punctuation.
+- **Vocabulary Building**: Automatically constructs a vocabulary from a dataset based on frequency.
+- **Model Architecture**: Implements a simple neural network with word embeddings, LSTM layers, and a softmax output for next-token prediction.
+- **Configurable**: Easily configurable via YAML files for model dimensions, learning rate, and more.
+- **Data Handling**: Supports JSONL formatted datasets for tokenized text.
+- **Pretrained Models**: Optionally load pretrained word embeddings and models.
 
 ## Installation
 
-Clone the repo and install in **editable mode**:
+### Prerequisites
 
-```bash
-git clone <your-assignment-repo>
-cd <your-assignment-repo>
-pip install -e .
-```
+- **Python 3.x**
+- **PyTorch**: The framework for model training.
+- **HuggingFace**: For tokenization and dataset management.
+- **Other dependencies**: Listed in `requirements.txt`.
 
-This uses the `pyproject.toml` provided in the repo.
+### Installation Steps
 
-- [Note: you may place dependencies directly under `[project] dependencies` in `pyproject.toml`, or keep them in a separate `requirements.txt` file and update accordingly.]
+1. Clone the repository:
 
----
-
-## Next Steps
-
-See **ASSIGNMENT.md** for full instructions on how to use and extend this scaffold.
+   ```bash
+   git clone https://github.com/Smuham98/NPLM.git
+   cd NPLM
