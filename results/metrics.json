@@ -1,0 +1,13 @@
+{
+    "train_ppl": 224.791,
+    "test_ppl": 202.3083,
+    "tokenizer": "word",
+    "vocab_size_or_merges": 20000,
+    "context_size": 5,
+    "embedding_dim": 50,
+    "hidden_dim": 100,
+    "num_epochs": 2,
+    "batch_size": 128,
+    "learning_rate": 0.001,
+    "train_time_sec": "Not captured in this run"
+}
