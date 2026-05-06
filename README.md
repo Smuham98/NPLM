@@ -7,19 +7,24 @@ This project implements a **Neural Probabilistic Language Model (NPLM)**, inspir
 The project directory is organized as follows:
 
 nplm-main/
+│
 ├── data/                   # Raw and preprocessed data
-│   ├── text8               # Original downloaded corpus
-│   └── text8_sentences.jsonl # Preprocessed sentences
+│   ├── text8/              # Original downloaded corpus
+│   └── text8_sentences.jsonl # Preprocessed JSONL shards
+│
 ├── results/                # Experiment results and metrics
-│   ├── metrics.json        # Key evaluation metrics
-│   ├── EXPERIMENTS.md      # Detailed experimental logs
+│   ├── metrics.json        # Key evaluation metrics (perplexity, training time, etc.)
+│   ├── EXPERIMENTS.md      # Detailed experimental log
 │   ├── LLM_LOG.md          # Log of LLM interactions
-│   ├── word_to_idx.json    # Word to integer ID mapping
-│   └── idx_to_word.json    # Integer ID to word mapping
-├── README.md               # Comprehensive project documentation
-├── ASSIGNMENT.md           # Original assignment description
+│   ├── word_to_idx.json    # Mapping of word to integer ID
+│   └── idx_to_word.json    # Mapping of integer ID to word
+│
+├── nplm-main/              # Main source code
+│   ├── README.md           # This comprehensive README file
+│   ├── ASSIGNMENT.md       # Original assignment description
+│   └── ...                 # Other project files (e.g., Colab notebook)
+│
 └── ...
-
 
 ## Setup and Installation
 
