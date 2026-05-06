@@ -19,7 +19,7 @@ This project implements a **Neural Probabilistic Language Model (NPLM)**, inspir
 - **`nplm-main/`**: Main source code
   - `README.md`: This comprehensive README file
   - `ASSIGNMENT.md`: Original assignment description
-  - `...`: Other project files (e.g., Colab notebook)
+  - Main.ipynb: Main project file
 
 ## Setup and Installation
 
