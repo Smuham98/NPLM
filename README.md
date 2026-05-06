@@ -1,145 +1,149 @@
-# NPLM (Neural Probabilistic Language Model)
-
-This repository contains an implementation of the **Neural Probabilistic Language Model (NPLM)**. The goal of this project is to train a neural network-based language model to predict the next word in a sequence based on a given context.
-
-## Table of Contents
-- [Overview](#overview)
-- [Features](#features)
-- [Installation](#installation)
-- [Dataset](#dataset)
-- [Training](#training)
-- [Evaluation](#evaluation)
-- [Model Configuration](#model-configuration)
-- [License](#license)
+# Neural Probabilistic Language Model (NPLM) Assignment
 
 ## Overview
+This project implements a **Neural Probabilistic Language Model (NPLM)**, inspired by **Bengio et al. (2003)**, aiming to predict the next word in a sequence using a feed-forward neural network. The task is to develop an end-to-end machine learning pipeline, covering data preprocessing, model building, training, and evaluation. The key evaluation metric is **perplexity**, which is used to gauge the model's prediction accuracy.
 
-The **NPLM** is a neural network-based language model that uses an embedding layer to map words to dense vectors, followed by an LSTM or GRU to capture context. The model is trained on text data and learns to predict the next word in a sequence, making it suitable for various NLP tasks such as text generation, language modeling, and sequence prediction.
+## Project Structure
+The project directory is organized as follows:
 
-This repository includes scripts for:
-- Preprocessing the dataset
-- Building the vocabulary
-- Training the model
-- Evaluating model performance
+nplm-main/
+├── data/                   # Raw and preprocessed data
+│   ├── text8               # Original downloaded corpus
+│   └── text8_sentences.jsonl # Preprocessed sentences
+├── results/                # Experiment results and metrics
+│   ├── metrics.json        # Key evaluation metrics
+│   ├── EXPERIMENTS.md      # Detailed experimental logs
+│   ├── LLM_LOG.md          # Log of LLM interactions
+│   ├── word_to_idx.json    # Word to integer ID mapping
+│   └── idx_to_word.json    # Integer ID to word mapping
+├── README.md               # Comprehensive project documentation
+├── ASSIGNMENT.md           # Original assignment description
+└── ...
 
-## Features
 
-- **Tokenizer**: Built to tokenize text data into words and handle punctuation.
-- **Vocabulary Building**: Automatically constructs a vocabulary from a dataset based on frequency.
-- **Model Architecture**: Implements a simple neural network with word embeddings, LSTM layers, and a softmax output for next-token prediction.
-- **Configurable**: Easily configurable via YAML files for model dimensions, learning rate, and more.
-- **Data Handling**: Supports JSONL formatted datasets for tokenized text.
-- **Pretrained Models**: Optionally load pretrained word embeddings and models.
+## Setup and Installation
 
-## Installation
+Follow these steps to set up the project:
 
-### Prerequisites
+### 1. Clone the Repository
+Start by cloning the project repository:
+```bash
+git clone <URL-of-instructor-repo>
+cd nplm-main
+````
 
-- **Python 3.x**
-- **PyTorch**: The framework for model training.
-- **HuggingFace**: For tokenization and dataset management.
-- **Other dependencies**: Listed in `requirements.txt`.
+### 2. Configure Remote Repositories
 
-### Installation Steps
+Remove the instructor's remote and set your own:
 
-1. Clone the repository:
+```bash
+git remote remove origin
+git remote add origin git@github.com:<your-username>/<your-repo>.git
+git push -u origin main
+```
 
-   ```bash
-   git clone https://github.com/Smuham98/NPLM.git
-   cd NPLM
+### 3. Install Dependencies
 
-2. Set up a Python virtual environment (optional but recommended):
+Install the required Python libraries using:
 
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # For Linux/Mac
-   venv\Scripts\activate     # For Windows
-   ```
+```bash
+pip install nltk torch scikit-learn
+```
 
-3. Install the required dependencies:
+Download necessary NLTK data:
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+```python
+import nltk
+nltk.download('punkt')
+nltk.download('punkt_tab')
+```
 
-## Dataset
+### 4. Data Download
 
-This project uses **Wikipedia text data** (e.g., Wikitext) for training the language model. The dataset can be downloaded from Kaggle or other sources and should be preprocessed into JSONL format (one document per line).
+The `text8` corpus is automatically downloaded and preprocessed in the notebook.
 
-### Dataset Preprocessing
+## Data Preprocessing
 
-1. Place the raw dataset in `data/raw/` directory.
-2. Run the preprocessing script to convert the dataset into JSONL format:
+The dataset used is the `text8` corpus, which consists of 100 million characters from Wikipedia text. The preprocessing pipeline involves:
 
-   ```bash
-   python -m nplm.preprocess --input_dir data/raw/wikitext2 --output_dir data/wikitext2_jsonl --shard_size 10000 --lowercase
-   ```
+* **Text Cleaning:** Lowercasing and whitespace normalization.
+* **Chunking:** The text is split into approximately 50-word chunks, which serve as sentences.
+* **Data Splits:** The data is split into 80% training, 10% validation, and 10% testing.
+* **Tokenization:** The text is tokenized at the word level with a vocabulary size of 20,000.
+
+## Tokenizer and Vocabulary
+
+* **Tokenization:** We use simple space-based splitting to tokenize the text into words.
+* **Vocabulary:** The vocabulary contains the 20,000 most frequent words from the corpus, plus special tokens:
+
+  * `<pad>`: Padding token
+  * `<unk>`: Unknown token for out-of-vocabulary words
+  * `<s>`: Start-of-sentence token
+  * `</s>`: End-of-sentence token
+* **Vocabulary Artifacts:** Mappings between words and their respective indices are stored in `word_to_idx.json` and `idx_to_word.json`.
+
+## NPLM Model Architecture
+
+The model architecture is a feed-forward neural network designed to predict the next word in a sequence. It operates on a fixed context window of size 5.
+
+* **Embedding Layer:** Uses `nn.Embedding` to map each word to a dense vector of dimension 50.
+* **Hidden Layer:** A linear transformation with `nn.Linear`, followed by a `Tanh` activation function. The hidden layer has 100 dimensions.
+* **Output Layer:** A final `nn.Linear` layer projects the hidden representation to a size equal to the vocabulary size, producing logits for each word.
 
 ## Training
 
-### Configuration
+* **Loss Function:** `nn.CrossEntropyLoss`, which is commonly used for classification tasks.
+* **Optimizer:** `torch.optim.Adam` with a learning rate of 0.001.
+* **Batch Size:** 128.
+* **Epochs:** The model is trained for 2 epochs.
 
-The model training can be customized using YAML configuration files. The configuration files can be found in the `configs/` directory. Key parameters include:
+## Results and Evaluation
 
-* **context_size**: Size of the context window (how many previous tokens the model will consider).
-* **embedding_dim**: Dimensionality of the token embeddings.
-* **hidden_dim**: Size of the hidden layers in the model.
-* **batch_size**: Number of samples per batch during training.
-* **max_steps**: Total number of training steps.
+Key metrics are recorded in `results/metrics.json`, including training and evaluation perplexity:
 
-### Train the Model
-
-To start training, simply run the following command:
-
-```bash
-python -m nplm.train --config configs/tiny.yaml --data_dir data/wikitext2_encoded --save_dir runs/exp1
+```json
+{
+  "train_ppl": 224.791,
+  "val_ppl": 201.3897,
+  "test_ppl": 203.6972,
+  "tokenizer": "word",
+  "vocab_size_or_merges": 20000,
+  "context_size": 5,
+  "embedding_dim": 50,
+  "hidden_dim": 100,
+  "num_epochs": 2,
+  "batch_size": 128,
+  "learning_rate": 0.001,
+  "train_time_sec": "Not captured in this run"
+}
 ```
 
-This will begin the training process and save the model checkpoints in the `runs/exp1` directory.
+### Experiment Log
 
-## Evaluation
+`results/EXPERIMENTS.md` contains detailed notes on hyperparameter tuning, training configurations, and observations during development.
 
-After training the model, you can evaluate it on a held-out test set:
+### LLM Collaboration Log
 
-```bash
-python -m nplm.eval --checkpoint runs/exp1/best.pt --data_dir data/wikitext2_encoded --out_json results/metrics.json
+`results/LLM_LOG.md` documents all interactions with the LLM during the project, including code generation, debugging, and guidance, ensuring transparency in the development process.
+
+## Current Status & Future Work
+
+### Completed
+
+* **Data Preprocessing:** The dataset is successfully processed and split into training, validation, and test sets.
+* **Model Training:** The model has been trained and evaluated on the data, with perplexity as the key evaluation metric.
+* **Results Logging:** Metrics and experiment logs are captured and saved.
+
+### Future Work
+
+* **Model Enhancements:** Investigate advanced techniques like sampled softmax and tied input-output embeddings.
+* **Plotting:** Visualize training/validation perplexity curves over training steps.
+* **Language Models:** Explore other architectures like Recurrent Neural Networks (RNNs) or Transformer-based models for better performance.
+
+## Conclusion
+
+This project provides a practical implementation of a **Neural Probabilistic Language Model (NPLM)**, with a focus on **perplexity** as the evaluation metric. Future enhancements could include more sophisticated models and optimization techniques to improve the quality of predictions and reduce training time. The code is designed to be extensible for future experiments and improvements.
+
+
+This `README.md` file provides a thorough explanation of the project, setup instructions, and an outline for future work. It helps others understand the full pipeline from data preprocessing to model evaluation, while also providing an easy way to run and test the project locally or in a cloud environment.
 ```
-
-This will compute metrics such as **perplexity** and save them in the `results/metrics.json` file.
-
-## Model Configuration
-
-There are two main configuration files provided in the `configs/` directory:
-
-1. **`tiny.yaml`**: A smaller model for quick experimentation and testing.
-2. **`medium.yaml`**: A larger model with more capacity for better performance.
-
-You can configure the following parameters in these files:
-
-* **`embedding_dim`**: Size of the word embeddings.
-* **`hidden_dim`**: Size of the hidden layers in the LSTM.
-* **`lr`**: Learning rate for the optimizer.
-* **`batch_size`**: The batch size used during training.
-* **`max_steps`**: Total number of steps to train for.
-
-You can specify which configuration to use by passing it to the training script:
-
-```bash
-python -m nplm.train --config configs/tiny.yaml --data_dir data/wikitext2_encoded --save_dir runs/exp1
-```
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-
-### **Instructions**:
-1. **Copy** the content above.
-2. **Paste** it into your `README.md` file.
-3. **Commit and push** to GitHub:
-
-```bash
-git add README.md
-git commit -m "Added high-level README for NPLM project"
-git push origin main
-````
