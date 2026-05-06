@@ -4,27 +4,22 @@
 This project implements a **Neural Probabilistic Language Model (NPLM)**, inspired by **Bengio et al. (2003)**, aiming to predict the next word in a sequence using a feed-forward neural network. The task is to develop an end-to-end machine learning pipeline, covering data preprocessing, model building, training, and evaluation. The key evaluation metric is **perplexity**, which is used to gauge the model's prediction accuracy.
 
 ## Project Structure
-The project directory is organized as follows:
 
-nplm-main/
-│
-├── data/                   # Raw and preprocessed data
-│   ├── text8/              # Original downloaded corpus
-│   └── text8_sentences.jsonl # Preprocessed JSONL shards
-│
-├── results/                # Experiment results and metrics
-│   ├── metrics.json        # Key evaluation metrics (perplexity, training time, etc.)
-│   ├── EXPERIMENTS.md      # Detailed experimental log
-│   ├── LLM_LOG.md          # Log of LLM interactions
-│   ├── word_to_idx.json    # Mapping of word to integer ID
-│   └── idx_to_word.json    # Mapping of integer ID to word
-│
-├── nplm-main/              # Main source code
-│   ├── README.md           # This comprehensive README file
-│   ├── ASSIGNMENT.md       # Original assignment description
-│   └── ...                 # Other project files (e.g., Colab notebook)
-│
-└── ...
+- **`data/`**: Contains the raw and preprocessed data
+  - `text8/`: Original downloaded corpus
+  - `text8_sentences.jsonl`: Preprocessed sentences
+
+- **`results/`**: Stores experiment results and metrics
+  - `metrics.json`: Key evaluation metrics
+  - `EXPERIMENTS.md`: Detailed experiment logs
+  - `LLM_LOG.md`: Log of LLM interactions
+  - `word_to_idx.json`: Word to integer ID mapping
+  - `idx_to_word.json`: Integer ID to word mapping
+
+- **`nplm-main/`**: Main source code
+  - `README.md`: This comprehensive README file
+  - `ASSIGNMENT.md`: Original assignment description
+  - `...`: Other project files (e.g., Colab notebook)
 
 ## Setup and Installation
 
